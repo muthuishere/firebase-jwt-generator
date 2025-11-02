@@ -590,9 +590,14 @@
   "storageBucket": "your-project.appspot.com",
   "messagingSenderId": "123456789",
   "appId": "1:123456789:web:abcdef123456"
-}'></textarea>
+}
+
+💡 Tip: Successful configurations are automatically saved for your session!'></textarea>
             <button onclick="initializeFirebase()">
                 <i class="fas fa-rocket"></i> Initialize Firebase
+            </button>
+            <button onclick="clearSavedConfig()" style="background-color: #6c757d; margin-left: 10px;">
+                <i class="fas fa-trash"></i> Clear Saved Config
             </button>
             <div id="initStatus"></div>
         </div>
@@ -687,6 +692,46 @@
         let auth = null;
         let currentUser = null;
 
+        // Load saved configuration on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadSavedConfig();
+        });
+
+        function loadSavedConfig() {
+            const savedConfig = sessionStorage.getItem('firebaseConfig');
+            if (savedConfig) {
+                document.getElementById('firebaseConfig').value = savedConfig;
+                document.getElementById('initStatus').innerHTML = `
+                    <div style="margin-bottom: 10px; padding: 10px; background-color: #d1ecf1; border-left: 4px solid #17a2b8; border-radius: 4px; font-size: 13px;">
+                        <strong>🔄 Configuration Loaded:</strong> Previously saved Firebase configuration has been loaded
+                        <button onclick="clearSavedConfig()" style="margin-left: 10px; background-color: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; font-size: 12px; cursor: pointer;">Clear Saved</button>
+                    </div>
+                `;
+            }
+        }
+
+        window.clearSavedConfig = function() {
+            const hadSavedConfig = sessionStorage.getItem('firebaseConfig') !== null;
+            sessionStorage.removeItem('firebaseConfig');
+            document.getElementById('firebaseConfig').value = '';
+            
+            if (hadSavedConfig) {
+                document.getElementById('initStatus').innerHTML = '<div class="success">✅ Saved configuration cleared!</div>';
+            } else {
+                document.getElementById('initStatus').innerHTML = '<div style="color: #856404; background-color: #fff3cd; padding: 10px; border-radius: 4px; border-left: 4px solid #ffc107;">ℹ️ No saved configuration to clear</div>';
+            }
+            
+            // Also clear any authentication state and hide sections
+            if (auth) {
+                signOut(auth).catch(err => console.log('No existing auth to clear'));
+            }
+            currentUser = null;
+            hideTokenSection();
+            clearTokenDisplay();
+            document.getElementById('authStatus').innerHTML = '';
+            document.getElementById('authSection').classList.add('hidden');
+        };
+
         window.initializeFirebase = function() {
             try {
                 const configText = document.getElementById('firebaseConfig').value;
@@ -719,6 +764,9 @@
                     }
                 });
                 
+                // Save successful configuration to session storage
+                sessionStorage.setItem('firebaseConfig', configText);
+                
                 // Show success message with domain authorization info
                 const projectId = config.projectId;
                 const currentDomain = window.location.origin;
@@ -727,6 +775,9 @@
                     <div style="margin-top: 10px; padding: 10px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; font-size: 13px;">
                         <strong>⚠️ Domain Authorization Required:</strong> Add <code>${currentDomain}</code> to authorized domains
                         <i class="fas fa-info-circle info-icon" onclick="openModal('domainAuthModal')" style="margin-left: 8px;"></i>
+                    </div>
+                    <div style="margin-top: 10px; padding: 10px; background-color: #d4edda; border-left: 4px solid #28a745; border-radius: 4px; font-size: 13px;">
+                        <strong>💾 Configuration Saved:</strong> Your Firebase configuration has been saved for this session
                     </div>
                 `;
                 
