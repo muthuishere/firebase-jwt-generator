@@ -216,14 +216,15 @@
         <div class="section">
             <h3>Step 2: Authentication</h3>
             <div id="authSection" class="hidden">
-                <div class="help-text">
-                    <h4>👤 How to Create Users:</h4>
+                <div class="help-text" id="userCreationHelp">
+                    <h4>👤 How to Create Users and Configure Authentication:</h4>
                     <ul>
                         <li><strong>Email/Password:</strong> Go to Firebase Console → Authentication → Users → Add user</li>
                         <li><strong>Google Sign-in:</strong> Enable Google provider in Authentication → Sign-in method</li>
                         <li><strong>GitHub Sign-in:</strong> Enable GitHub provider in Authentication → Sign-in method</li>
                         <li>For OAuth providers, you'll need to configure OAuth apps in respective platforms</li>
                     </ul>
+                    <p><em>Initialize Firebase first to get direct links to your project's authentication settings.</em></p>
                 </div>
                 
                 <label for="email">Email:</label>
@@ -349,6 +350,9 @@
                         <p><em>Without this step, authentication will fail with "auth/unauthorized-domain" error.</em></p>
                     </div>
                 `;
+                
+                // Update authentication help with project-specific links
+                updateAuthenticationHelp(projectId);
                 document.getElementById('authSection').classList.remove('hidden');
                 
             } catch (error) {
@@ -505,6 +509,42 @@
         function showManualTokenButton() {
             document.getElementById('manualTokenButtons').classList.remove('hidden');
             document.getElementById('refreshTokenButtons').classList.add('hidden');
+        }
+
+        function updateAuthenticationHelp(projectId) {
+            document.getElementById('userCreationHelp').innerHTML = `
+                <h4>👤 How to Create Users and Configure Authentication:</h4>
+                <div style="background-color: #e8f5e8; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                    <h5 style="margin-top: 0; color: #2e7d32;">🔗 Direct Links for Your Project:</h5>
+                    <ul style="margin-bottom: 0;">
+                        <li><strong>Create Users & Manage Authentication:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
+                        <li><strong>Configure Sign-in Methods:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                        <li><strong>Domain Settings:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/settings" target="_blank">Authentication Settings</a></li>
+                    </ul>
+                </div>
+                <h5>📝 Step-by-Step Instructions:</h5>
+                <ul>
+                    <li><strong>Email/Password Users:</strong> 
+                        <ul>
+                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
+                            <li>Click "Add user" and enter email/password</li>
+                        </ul>
+                    </li>
+                    <li><strong>Google Sign-in:</strong>
+                        <ul>
+                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                            <li>Enable "Google" provider and configure OAuth settings</li>
+                        </ul>
+                    </li>
+                    <li><strong>GitHub Sign-in:</strong>
+                        <ul>
+                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                            <li>Enable "GitHub" provider and configure OAuth app credentials</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p><em>💡 Tip: For OAuth providers (Google/GitHub), you'll need to create OAuth apps in their respective developer consoles and add the credentials to Firebase.</em></p>
+            `;
         }
 
         function displayToken(token) {
