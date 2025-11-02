@@ -259,12 +259,19 @@
             <h3>Step 3: JWT Token</h3>
             <div id="tokenSection" class="hidden">
                 <p>User authenticated successfully!</p>
-                <button onclick="getIdToken()">
-                    <i class="fas fa-key"></i> Get JWT Token
-                </button>
-                <button onclick="refreshToken()">
-                    <i class="fas fa-sync-alt"></i> Refresh Token
-                </button>
+                
+                <div id="manualTokenButtons">
+                    <button onclick="getIdToken()">
+                        <i class="fas fa-key"></i> Get JWT Token
+                    </button>
+                </div>
+                
+                <div id="refreshTokenButtons" class="hidden">
+                    <button onclick="refreshToken()">
+                        <i class="fas fa-sync-alt"></i> Refresh Token
+                    </button>
+                    <p><em>JWT token retrieved successfully! Use refresh to get a new token.</em></p>
+                </div>
                 
                 <div id="userInfo"></div>
                 
@@ -315,13 +322,33 @@
                     if (user) {
                         currentUser = user;
                         showTokenSection(user);
+                        // Automatically get JWT token after sign-in
+                        getIdTokenAutomatically();
                     } else {
                         currentUser = null;
                         hideTokenSection();
                     }
                 });
                 
-                document.getElementById('initStatus').innerHTML = '<div class="success">✅ Firebase initialized successfully!</div>';
+                // Show success message with domain authorization info
+                const projectId = config.projectId;
+                const currentDomain = window.location.origin;
+                document.getElementById('initStatus').innerHTML = `
+                    <div class="success">✅ Firebase initialized successfully!</div>
+                    <div class="help-text" style="margin-top: 15px;">
+                        <h4>🔐 Important: Domain Authorization Required</h4>
+                        <p><strong>Before authentication will work, you need to add this domain to your Firebase project:</strong></p>
+                        <p><strong>Current domain:</strong> <code>${currentDomain}</code></p>
+                        <p><strong>Steps:</strong></p>
+                        <ol>
+                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/settings" target="_blank">Firebase Authentication Settings</a></li>
+                            <li>Scroll down to "Authorized domains"</li>
+                            <li>Click "Add domain" and add: <strong>${currentDomain}</strong></li>
+                            <li>Save the changes</li>
+                        </ol>
+                        <p><em>Without this step, authentication will fail with "auth/unauthorized-domain" error.</em></p>
+                    </div>
+                `;
                 document.getElementById('authSection').classList.remove('hidden');
                 
             } catch (error) {
@@ -372,10 +399,9 @@
             try {
                 await signOut(auth);
                 showAuthStatus('✅ Signed out successfully!', 'success');
-                // Clear token display
-                document.getElementById('jwtToken').textContent = '';
-                document.getElementById('tokenClaims').textContent = '';
-                document.getElementById('tokenDisplay').classList.add('hidden');
+                // Clear token display and reset button states
+                clearTokenDisplay();
+                showManualTokenButton();
                 console.log('User signed out and UI cleared');
             } catch (error) {
                 showAuthStatus(`❌ Sign out failed: ${error.message}`, 'error');
@@ -394,8 +420,27 @@
             try {
                 const token = await currentUser.getIdToken();
                 displayToken(token);
+                // After getting the token, hide the "Get JWT Token" button and show only refresh
+                showOnlyRefreshButton();
             } catch (error) {
                 alert(`Error getting token: ${error.message}`);
+            }
+        };
+
+        window.getIdTokenAutomatically = async function() {
+            if (!currentUser) {
+                return;
+            }
+            
+            try {
+                const token = await currentUser.getIdToken();
+                displayToken(token);
+                // After getting the token automatically, show only refresh button
+                showOnlyRefreshButton();
+            } catch (error) {
+                console.error(`Error getting token automatically: ${error.message}`);
+                // If automatic token retrieval fails, show the manual button
+                showManualTokenButton();
             }
         };
 
@@ -442,12 +487,24 @@
 
         function hideTokenSection() {
             document.getElementById('tokenSection').classList.add('hidden');
+            // Reset button visibility when hiding token section
+            showManualTokenButton();
         }
 
         function clearTokenDisplay() {
             document.getElementById('jwtToken').textContent = '';
             document.getElementById('tokenClaims').textContent = '';
             document.getElementById('tokenDisplay').classList.add('hidden');
+        }
+
+        function showOnlyRefreshButton() {
+            document.getElementById('manualTokenButtons').classList.add('hidden');
+            document.getElementById('refreshTokenButtons').classList.remove('hidden');
+        }
+
+        function showManualTokenButton() {
+            document.getElementById('manualTokenButtons').classList.remove('hidden');
+            document.getElementById('refreshTokenButtons').classList.add('hidden');
         }
 
         function displayToken(token) {
