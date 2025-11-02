@@ -102,6 +102,12 @@
             margin: 15px 0;
         }
         
+        .auth-btn-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .auth-btn {
             display: flex;
             align-items: center;
@@ -179,25 +185,403 @@
         .help-text a:hover {
             text-decoration: underline;
         }
+        
+        /* Floating Action Button Styles */
+        .floating-menu {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .fab-main {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .fab-main:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
+        }
+        
+        .fab-menu {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+        
+        .fab-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .fab-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: #333;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-weight: 500;
+        }
+        
+        .fab-item:hover {
+            transform: translateX(-10px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .fab-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+        
+        .fab-item.github i {
+            color: #333;
+        }
+        
+        .fab-item.linkedin i {
+            color: #0077b5;
+        }
+        
+        /* Rotate main button when menu is open */
+        .fab-main.active {
+            transform: rotate(45deg);
+        }
+        
+        .fab-main.active:hover {
+            transform: rotate(45deg) scale(1.1);
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .floating-menu {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .fab-main {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            .fab-menu {
+                bottom: 70px;
+            }
+            
+            .fab-item {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+        }
+        
+        /* Footer Styles */
+        .site-footer {
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            padding: 20px 0;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-description {
+            margin-bottom: 20px;
+        }
+        
+        .footer-description p {
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #495057;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: white;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: #495057;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .footer-link i {
+            font-size: 16px;
+        }
+        
+
+        
+        @media (max-width: 480px) {
+            .footer-links {
+                gap: 15px;
+            }
+            
+            .footer-link {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+        
+        /* Info Popup Modal Styles */
+        .info-icon {
+            color: #007bff;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            margin-left: 8px;
+        }
+        
+        .info-icon:hover {
+            color: #0056b3;
+            background-color: #e7f3ff;
+            transform: scale(1.1);
+        }
+        
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(2px);
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        /* Modal Content */
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 25px;
+        }
+        
+        .modal-body h4 {
+            color: #333;
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .modal-body h5 {
+            color: #2e7d32;
+            margin: 20px 0 10px 0;
+            font-size: 15px;
+            border-bottom: 2px solid #e8f5e8;
+            padding-bottom: 5px;
+        }
+        
+        .direct-links {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .direct-links ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .direct-links li {
+            margin-bottom: 8px;
+        }
+        
+        .direct-links a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .direct-links a:hover {
+            text-decoration: underline;
+            color: #1b5e20;
+        }
+        
+        .modal-body ul {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+        
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+        
+        .modal-body strong {
+            color: #333;
+        }
+        
+        .modal-body a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .modal-body a:hover {
+            text-decoration: underline;
+        }
+        
+        .tip-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .tip-box strong {
+            color: #856404;
+        }
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95%;
+                max-height: 90vh;
+            }
+            
+            .modal-header {
+                padding: 15px 20px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🔥 Firebase JWT Token Generator</h1>
         
-        <div class="help-text">
-            <h4>📋 How to Get Firebase Configuration:</h4>
-            <ul>
-                <li>Go to <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
-                <li>Select your project or create a new one</li>
-                <li>Go to Project Settings ⚙️ → General tab</li>
-                <li>Scroll down to "Your apps" section and select your web app</li>
-                <li>Copy the config object from the "Firebase SDK snippet"</li>
-            </ul>
+        <div style="text-align: center; margin-bottom: 30px; padding: 15px; background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border-radius: 8px; border-left: 4px solid #2196F3;">
+            <p style="margin: 0; font-size: 16px; color: #333; line-height: 1.5;">
+                <strong>Generate Firebase JWT tokens for testing and development</strong> - Authenticate with Email/Password, Google, or GitHub and get JWT tokens to test your Firebase-secured APIs and applications.
+            </p>
         </div>
         
         <div class="section">
-            <h3>Step 1: Firebase Configuration</h3>
+            <h3>Step 1: Firebase Configuration
+                <i class="fas fa-info-circle info-icon" onclick="openModal('firebaseConfigModal')"></i>
+            </h3>
             <label for="firebaseConfig">Paste your Firebase Config JSON:</label>
             <textarea id="firebaseConfig" rows="8" placeholder='{
   "apiKey": "your-api-key",
@@ -214,18 +598,10 @@
         </div>
 
         <div class="section">
-            <h3>Step 2: Authentication</h3>
+            <h3>Step 2: Authentication
+                <i class="fas fa-info-circle info-icon" onclick="openModal('authSetupModal')"></i>
+            </h3>
             <div id="authSection" class="hidden">
-                <div class="help-text" id="userCreationHelp">
-                    <h4>👤 How to Create Users and Configure Authentication:</h4>
-                    <ul>
-                        <li><strong>Email/Password:</strong> Go to Firebase Console → Authentication → Users → Add user</li>
-                        <li><strong>Google Sign-in:</strong> Enable Google provider in Authentication → Sign-in method</li>
-                        <li><strong>GitHub Sign-in:</strong> Enable GitHub provider in Authentication → Sign-in method</li>
-                        <li>For OAuth providers, you'll need to configure OAuth apps in respective platforms</li>
-                    </ul>
-                    <p><em>Initialize Firebase first to get direct links to your project's authentication settings.</em></p>
-                </div>
                 
                 <label for="email">Email:</label>
                 <input type="email" id="email" placeholder="user@example.com">
@@ -234,18 +610,30 @@
                 <input type="password" id="password" placeholder="password">
                 
                 <div class="auth-buttons">
-                    <button class="auth-btn email-btn" onclick="signInUser()">
-                        <i class="fas fa-envelope"></i>
-                        Sign In with Email
-                    </button>
-                    <button class="auth-btn google-btn" onclick="signInWithGoogle()">
-                        <i class="fab fa-google"></i>
-                        Sign In with Google
-                    </button>
-                    <button class="auth-btn github-btn" onclick="signInWithGithub()">
-                        <i class="fab fa-github"></i>
-                        Sign In with GitHub
-                    </button>
+                    <div class="auth-btn-container">
+                        <button class="auth-btn email-btn" onclick="signInUser()">
+                            <i class="fas fa-envelope"></i>
+                            Sign In with Email
+                        </button>
+                        <i class="fas fa-info-circle info-icon" onclick="openModal('emailAuthModal')"></i>
+                    </div>
+                    
+                    <div class="auth-btn-container">
+                        <button class="auth-btn google-btn" onclick="signInWithGoogle()">
+                            <i class="fab fa-google"></i>
+                            Sign In with Google
+                        </button>
+                        <i class="fas fa-info-circle info-icon" onclick="openModal('googleAuthModal')"></i>
+                    </div>
+                    
+                    <div class="auth-btn-container">
+                        <button class="auth-btn github-btn" onclick="signInWithGithub()">
+                            <i class="fab fa-github"></i>
+                            Sign In with GitHub
+                        </button>
+                        <i class="fas fa-info-circle info-icon" onclick="openModal('githubAuthModal')"></i>
+                    </div>
+                    
                     <button class="auth-btn clear-btn" onclick="clearAuth()">
                         <i class="fas fa-sign-out-alt"></i>
                         Clear Auth
@@ -336,23 +724,16 @@
                 const currentDomain = window.location.origin;
                 document.getElementById('initStatus').innerHTML = `
                     <div class="success">✅ Firebase initialized successfully!</div>
-                    <div class="help-text" style="margin-top: 15px;">
-                        <h4>🔐 Important: Domain Authorization Required</h4>
-                        <p><strong>Before authentication will work, you need to add this domain to your Firebase project:</strong></p>
-                        <p><strong>Current domain:</strong> <code>${currentDomain}</code></p>
-                        <p><strong>Steps:</strong></p>
-                        <ol>
-                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/settings" target="_blank">Firebase Authentication Settings</a></li>
-                            <li>Scroll down to "Authorized domains"</li>
-                            <li>Click "Add domain" and add: <strong>${currentDomain}</strong></li>
-                            <li>Save the changes</li>
-                        </ol>
-                        <p><em>Without this step, authentication will fail with "auth/unauthorized-domain" error.</em></p>
+                    <div style="margin-top: 10px; padding: 10px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px; font-size: 13px;">
+                        <strong>⚠️ Domain Authorization Required:</strong> Add <code>${currentDomain}</code> to authorized domains
+                        <i class="fas fa-info-circle info-icon" onclick="openModal('domainAuthModal')" style="margin-left: 8px;"></i>
                     </div>
                 `;
                 
                 // Update authentication help with project-specific links
                 updateAuthenticationHelp(projectId);
+                updateDomainAuthModal(projectId, currentDomain);
+                updateProviderModals(projectId);
                 document.getElementById('authSection').classList.remove('hidden');
                 
             } catch (error) {
@@ -512,38 +893,158 @@
         }
 
         function updateAuthenticationHelp(projectId) {
-            document.getElementById('userCreationHelp').innerHTML = `
-                <h4>👤 How to Create Users and Configure Authentication:</h4>
-                <div style="background-color: #e8f5e8; padding: 15px; border-radius: 5px; margin-bottom: 15px;">
-                    <h5 style="margin-top: 0; color: #2e7d32;">🔗 Direct Links for Your Project:</h5>
-                    <ul style="margin-bottom: 0;">
-                        <li><strong>Create Users & Manage Authentication:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
-                        <li><strong>Configure Sign-in Methods:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+            document.getElementById('authSetupModalContent').innerHTML = `
+                <h3>� Authentication Setup</h3>
+                <button class="modal-close" onclick="closeModal('authSetupModal')">&times;</button>
+            `;
+            
+            const modalBody = document.querySelector('#authSetupModal .modal-content');
+            if (!modalBody.querySelector('.modal-body')) {
+                const bodyDiv = document.createElement('div');
+                bodyDiv.className = 'modal-body';
+                bodyDiv.innerHTML = `
+                    <div class="direct-links">
+                        <h5>🔗 Direct Links for Your Project:</h5>
+                        <ul>
+                            <li><strong>Create Users & Manage Authentication:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
+                            <li><strong>Configure Sign-in Methods:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                            <li><strong>Domain Settings:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/settings" target="_blank">Authentication Settings</a></li>
+                        </ul>
+                    </div>
+                    
+                    <h5>📝 Step-by-Step Instructions:</h5>
+                    <ul>
+                        <li><strong>Email/Password Users:</strong> 
+                            <ul>
+                                <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
+                                <li>Click "Add user" and enter email/password</li>
+                            </ul>
+                        </li>
+                        <li><strong>Google Sign-in:</strong>
+                            <ul>
+                                <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                                <li>Enable "Google" provider and configure OAuth settings</li>
+                            </ul>
+                        </li>
+                        <li><strong>GitHub Sign-in:</strong>
+                            <ul>
+                                <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                                <li>Enable "GitHub" provider and configure OAuth app credentials</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <strong>💡 Tip:</strong> For OAuth providers (Google/GitHub), you'll need to create OAuth apps in their respective developer consoles and add the credentials to Firebase.
+                    </div>
+                `;
+                modalBody.appendChild(bodyDiv);
+            }
+        }
+
+        function updateDomainAuthModal(projectId, currentDomain) {
+            document.getElementById('domainAuthContent').innerHTML = `
+                <h4>⚠️ Why is this needed?</h4>
+                <p>Firebase requires you to authorize domains that can use authentication to prevent unauthorized access.</p>
+                
+                <div class="direct-links">
+                    <h5>🔗 Direct Link:</h5>
+                    <p><strong>Current domain:</strong> <code>${currentDomain}</code></p>
+                    <p><a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/settings" target="_blank">Go to Firebase Authentication Settings</a></p>
+                </div>
+                
+                <h4>🔧 Steps to authorize domain:</h4>
+                <ol>
+                    <li>Click the direct link above</li>
+                    <li>Scroll down to "Authorized domains"</li>
+                    <li>Click "Add domain"</li>
+                    <li>Add: <strong><code>${currentDomain}</code></strong></li>
+                    <li>Save the changes</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <strong>⚠️ Important:</strong> Without this step, authentication will fail with "auth/unauthorized-domain" error.
+                </div>
+            `;
+        }
+
+        function updateProviderModals(projectId) {
+            // Update Email/Password modal
+            document.getElementById('emailAuthContent').innerHTML = `
+                <div class="direct-links">
+                    <h5>🔗 Direct Links for Your Project:</h5>
+                    <ul>
+                        <li><strong>Enable Email/Password Provider:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                        <li><strong>Create Users:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
+                    </ul>
+                </div>
+                
+                <h4>🔧 Setup Steps:</h4>
+                <ol>
+                    <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                    <li>Find "Email/Password" and toggle it on</li>
+                    <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
+                    <li>Click "Add user" and enter email/password for test users</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <strong>💡 Tip:</strong> You can also enable "Email link (passwordless sign-in)" for a better user experience.
+                </div>
+            `;
+
+            // Update Google Sign-in modal
+            document.getElementById('googleAuthContent').innerHTML = `
+                <div class="direct-links">
+                    <h5>🔗 Direct Links for Your Project:</h5>
+                    <ul>
+                        <li><strong>Enable Google Provider:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
                         <li><strong>Domain Settings:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/settings" target="_blank">Authentication Settings</a></li>
                     </ul>
                 </div>
-                <h5>📝 Step-by-Step Instructions:</h5>
-                <ul>
-                    <li><strong>Email/Password Users:</strong> 
+                
+                <h4>🔧 Setup Steps:</h4>
+                <ol>
+                    <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                    <li>Find "Google" and toggle it on</li>
+                    <li>Configure OAuth consent screen in Google Cloud Console (if needed)</li>
+                    <li>Ensure your domain is in <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/settings" target="_blank">authorized domains</a></li>
+                    <li>Firebase will automatically configure the Web Client ID</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <strong>⚠️ Important:</strong> For production apps, you'll need to configure the OAuth consent screen properly in Google Cloud Console.
+                </div>
+            `;
+
+            // Update GitHub Sign-in modal
+            document.getElementById('githubAuthContent').innerHTML = `
+                <div class="direct-links">
+                    <h5>🔗 Direct Links for Your Project:</h5>
+                    <ul>
+                        <li><strong>Enable GitHub Provider:</strong> <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                        <li><strong>Create GitHub OAuth App:</strong> <a href="https://github.com/settings/developers" target="_blank">GitHub Developer Settings</a></li>
+                    </ul>
+                </div>
+                
+                <h4>🔧 Setup Steps:</h4>
+                <ol>
+                    <li><strong>Create OAuth App:</strong> Go to <a href="https://github.com/settings/developers" target="_blank">GitHub Developer Settings</a> → OAuth Apps</li>
+                    <li><strong>New OAuth App:</strong> Click "New OAuth App"</li>
+                    <li><strong>Configure App:</strong>
                         <ul>
-                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/users" target="_blank">Users Management</a></li>
-                            <li>Click "Add user" and enter email/password</li>
+                            <li>Application name: Your app name</li>
+                            <li>Homepage URL: Your app URL</li>
+                            <li>Authorization callback URL: <code>https://${projectId}.firebaseapp.com/__/auth/handler</code></li>
                         </ul>
                     </li>
-                    <li><strong>Google Sign-in:</strong>
-                        <ul>
-                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
-                            <li>Enable "Google" provider and configure OAuth settings</li>
-                        </ul>
-                    </li>
-                    <li><strong>GitHub Sign-in:</strong>
-                        <ul>
-                            <li>Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
-                            <li>Enable "GitHub" provider and configure OAuth app credentials</li>
-                        </ul>
-                    </li>
-                </ul>
-                <p><em>💡 Tip: For OAuth providers (Google/GitHub), you'll need to create OAuth apps in their respective developer consoles and add the credentials to Firebase.</em></p>
+                    <li><strong>Get Credentials:</strong> Copy Client ID and Client Secret</li>
+                    <li><strong>Enable in Firebase:</strong> Go to <a href="https://console.firebase.google.com/u/0/project/${projectId}/authentication/providers" target="_blank">Authentication Providers</a></li>
+                    <li><strong>Configure GitHub:</strong> Enable GitHub provider and add your Client ID and Client Secret</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <strong>🔗 Your Callback URL:</strong> <code>https://${projectId}.firebaseapp.com/__/auth/handler</code>
+                </div>
             `;
         }
 
@@ -560,6 +1061,232 @@
             
             document.getElementById('tokenDisplay').classList.remove('hidden');
         }
+    </script>
+
+                </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-description">
+                <p><strong>Firebase JWT Token Generator</strong> - A development tool for generating and managing Firebase authentication tokens. Perfect for testing Firebase-authenticated APIs, debugging authentication flows, and development environments.</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/muthuishere/firebase-jwt-generator" target="_blank" class="footer-link">
+                    <i class="fab fa-github"></i>
+                    Source Code
+                </a>
+                <a href="https://www.linkedin.com/in/muthuishere/" target="_blank" class="footer-link">
+                    <i class="fab fa-linkedin"></i>
+                    Connect
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Info Modals -->
+    <div id="firebaseConfigModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📋 Firebase Configuration Setup</h3>
+                <button class="modal-close" onclick="closeModal('firebaseConfigModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>🔗 How to Get Firebase Configuration:</h4>
+                <ul>
+                    <li>Go to <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
+                    <li>Select your project or create a new one</li>
+                    <li>Go to Project Settings ⚙️ → General tab</li>
+                    <li>Scroll down to "Your apps" section and select your web app</li>
+                    <li>Copy the config object from the "Firebase SDK snippet"</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <strong>💡 Tip:</strong> If you don't have a web app, click "Add app" and select the web platform (&lt;/&gt;) to create one.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="authSetupModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="authSetupModalContent"></div>
+                <button class="modal-close" onclick="closeModal('authSetupModal')">&times;</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="emailAuthModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📧 Email/Password Authentication Setup</h3>
+                <button class="modal-close" onclick="closeModal('emailAuthModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="emailAuthContent">
+                <h4>🔧 Setup Steps:</h4>
+                <ul>
+                    <li><strong>Enable Provider:</strong> Go to Firebase Console → Authentication → Sign-in method</li>
+                    <li><strong>Enable Email/Password:</strong> Toggle on the Email/Password provider</li>
+                    <li><strong>Create Users:</strong> Go to Authentication → Users → Add user</li>
+                    <li><strong>Enter credentials:</strong> Add email and password for test users</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <strong>💡 Tip:</strong> You can also enable "Email link (passwordless sign-in)" for a better user experience.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="googleAuthModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔍 Google Sign-in Setup</h3>
+                <button class="modal-close" onclick="closeModal('googleAuthModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="googleAuthContent">
+                <h4>🔧 Setup Steps:</h4>
+                <ul>
+                    <li><strong>Enable Provider:</strong> Go to Firebase Console → Authentication → Sign-in method</li>
+                    <li><strong>Enable Google:</strong> Toggle on the Google provider</li>
+                    <li><strong>Configure OAuth:</strong> Set up OAuth consent screen in Google Cloud Console</li>
+                    <li><strong>Add Domain:</strong> Include your domain in authorized domains</li>
+                    <li><strong>Web Client ID:</strong> Firebase will automatically configure this</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <strong>⚠️ Important:</strong> For production apps, you'll need to configure the OAuth consent screen properly in Google Cloud Console.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="githubAuthModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🐙 GitHub Sign-in Setup</h3>
+                <button class="modal-close" onclick="closeModal('githubAuthModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="githubAuthContent">
+                <h4>🔧 Setup Steps:</h4>
+                <ul>
+                    <li><strong>Create OAuth App:</strong> Go to GitHub → Settings → Developer settings → OAuth Apps</li>
+                    <li><strong>New OAuth App:</strong> Click "New OAuth App"</li>
+                    <li><strong>Configure App:</strong>
+                        <ul>
+                            <li>Application name: Your app name</li>
+                            <li>Homepage URL: Your app URL</li>
+                            <li>Authorization callback URL: <code>https://your-project.firebaseapp.com/__/auth/handler</code></li>
+                        </ul>
+                    </li>
+                    <li><strong>Get Credentials:</strong> Copy Client ID and Client Secret</li>
+                    <li><strong>Enable in Firebase:</strong> Go to Firebase Console → Authentication → Sign-in method</li>
+                    <li><strong>Configure GitHub:</strong> Enable GitHub provider and add your credentials</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <strong>🔗 Callback URL:</strong> The callback URL format is always <code>https://PROJECT_ID.firebaseapp.com/__/auth/handler</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="domainAuthModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🔐 Domain Authorization Setup</h3>
+                <button class="modal-close" onclick="closeModal('domainAuthModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="domainAuthContent">
+                <h4>⚠️ Why is this needed?</h4>
+                <p>Firebase requires you to authorize domains that can use authentication to prevent unauthorized access.</p>
+                
+                <h4>🔧 Steps to authorize domain:</h4>
+                <ol>
+                    <li>Go to <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
+                    <li>Select your project</li>
+                    <li>Go to Authentication → Settings</li>
+                    <li>Scroll down to "Authorized domains"</li>
+                    <li>Click "Add domain"</li>
+                    <li>Add your current domain</li>
+                    <li>Save the changes</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <strong>⚠️ Important:</strong> Without this step, authentication will fail with "auth/unauthorized-domain" error.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="floating-menu">
+        <div class="fab-menu" id="fabMenu">
+            <a href="https://github.com/muthuishere/firebase-jwt-generator" target="_blank" class="fab-item github">
+                <i class="fab fa-github"></i>
+                <span>View Source Code</span>
+            </a>
+            <a href="https://www.linkedin.com/in/muthuishere/" target="_blank" class="fab-item linkedin">
+                <i class="fab fa-linkedin"></i>
+                <span>Connect with Me</span>
+            </a>
+        </div>
+        <button class="fab-main" id="fabMain" onclick="toggleFabMenu()">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <script>
+        function toggleFabMenu() {
+            const fabMenu = document.getElementById('fabMenu');
+            const fabMain = document.getElementById('fabMain');
+            
+            fabMenu.classList.toggle('active');
+            fabMain.classList.toggle('active');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const floatingMenu = document.querySelector('.floating-menu');
+            const fabMenu = document.getElementById('fabMenu');
+            const fabMain = document.getElementById('fabMain');
+            
+            if (!floatingMenu.contains(event.target)) {
+                fabMenu.classList.remove('active');
+                fabMain.classList.remove('active');
+            }
+            
+            // Close modals when clicking outside modal content
+            document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+        });
     </script>
 </body>
 </html>
