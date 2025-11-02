@@ -9,14 +9,14 @@ A simple web-based tool to generate Firebase JWT tokens for development and test
 ## 🛠️ Local Development
  Make sure you have [Task](https://taskfile.dev/#/installation) installed.
  Make sure you have [Node.js](https://nodejs.org/) installed.
- 
+
 ```bash
 git clone https://github.com/muthuishere/firebase-jwt-generator.git
 cd firebase-jwt-generator
 task dev
 ```
 
-The app will be available at `http://localhost:8080`
+The app will be available at `http://localhost:4500`
 
 ## � Privacy & Security
 
