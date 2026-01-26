@@ -10,3 +10,8 @@ tasks:
       - |
         npm install -g serve
         serve public/ -p 4500
+
+  deploy:
+    desc: Deploy to production server
+    cmds:
+      - kamal deploy 
