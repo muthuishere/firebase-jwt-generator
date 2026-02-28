@@ -4,586 +4,750 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firebase JWT Token Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #eef2ff;
+            --secondary: #f97316;
+            --surface: #ffffff;
+            --surface-2: #f8fafc;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --success: #10b981;
+            --success-bg: #d1fae5;
+            --error: #ef4444;
+            --error-bg: #fee2e2;
+            --warning: #f59e0b;
+            --warning-bg: #fef3c7;
+            --info: #3b82f6;
+            --info-bg: #dbeafe;
+            --radius-sm: 6px;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            font-family: 'Inter', Arial, sans-serif;
+            background: #f1f5f9;
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
+
+        /* ── Hero Header ──────────────────────────────────────────── */
+        .hero {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4c1d95 100%);
+            padding: 52px 24px 40px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .section {
-            margin: 20px 0;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(99,102,241,0.25) 0%, transparent 65%),
+                        radial-gradient(ellipse at 20% 80%, rgba(168,85,247,0.15) 0%, transparent 55%);
+            pointer-events: none;
         }
+
+        .hero-inner {
+            position: relative;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #c7d2fe;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            border-radius: 999px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(26px, 5vw, 40px);
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, #a5b4fc, #f0abfc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: #c7d2fe;
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #a5b4fc;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .hero-stat i {
+            font-size: 15px;
+            opacity: 0.8;
+        }
+
+        /* ── Main layout ──────────────────────────────────────────── */
+        .main-wrapper {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 36px 20px 60px;
+        }
+
+        /* ── Step Cards ───────────────────────────────────────────── */
+        .step-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+
+        .step-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface-2);
+        }
+
+        .step-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.35);
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            flex: 1;
+        }
+
+        .step-body {
+            padding: 24px;
+        }
+
+        /* ── Form Controls ────────────────────────────────────────── */
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 7px;
         }
+
         input, textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+            padding: 11px 14px;
+            font-family: inherit;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--surface-2);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 14px;
         }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+            background: var(--surface);
+        }
+
+        textarea {
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 160px;
+        }
+
+        /* ── Buttons ──────────────────────────────────────────────── */
         button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
-        button:hover {
-            background-color: #45a049;
-        }
+
         button:disabled {
-            background-color: #cccccc;
+            opacity: 0.5;
             cursor: not-allowed;
         }
-        .error {
-            color: red;
-            margin: 10px 0;
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.35);
         }
-        .success {
-            color: green;
-            margin: 10px 0;
+
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--primary-dark), #3730a3);
+            box-shadow: 0 4px 14px rgba(99,102,241,0.45);
+            transform: translateY(-1px);
         }
-        .token-display {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 15px;
-            margin: 10px 0;
-            word-break: break-all;
-            font-family: monospace;
-            font-size: 12px;
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text-muted);
+            border: 1.5px solid var(--border);
         }
-        .copy-btn {
-            background-color: #007bff;
-            font-size: 12px;
-            padding: 5px 10px;
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--border);
+            color: var(--text);
         }
-        .copy-btn:hover {
-            background-color: #0056b3;
+
+        .btn-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 4px;
         }
-        .status {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-        }
-        .hidden {
-            display: none;
-        }
-        
-        /* Auth Button Styles */
+
+        /* ── Auth Buttons ─────────────────────────────────────────── */
         .auth-buttons {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin: 15px 0;
+            margin: 16px 0 0;
         }
-        
+
         .auth-btn-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-        
+
         .auth-btn {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 16px;
+            padding: 10px 18px;
             border: none;
-            border-radius: 6px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
+            font-family: inherit;
             font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            min-width: 160px;
+            font-weight: 600;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-1px);
+            filter: brightness(1.1);
+        }
+
+        .auth-btn i { font-size: 15px; }
+
+        .email-btn  { background: #4285f4; color: white; box-shadow: 0 2px 6px rgba(66,133,244,0.3); }
+        .google-btn { background: #db4437; color: white; box-shadow: 0 2px 6px rgba(219,68,55,0.3); }
+        .github-btn { background: #24292e; color: white; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+        .clear-btn  { background: #f1f5f9; color: #ef4444; border: 1.5px solid #fecaca; }
+        .clear-btn:hover { background: #fee2e2; }
+
+        /* ── Status / Feedback ────────────────────────────────────── */
+        .hidden { display: none !important; }
+
+        .status-msg {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13.5px;
+            margin-top: 12px;
+        }
+
+        .error, .success {
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-top: 12px;
+            font-size: 13.5px;
+            border-left: 3px solid;
+        }
+        .error   { color: var(--error);  background: var(--error-bg);   border-color: var(--error);   }
+        .success { color: #065f46;       background: var(--success-bg); border-color: var(--success); }
+
+        /* ── Token Display ────────────────────────────────────────── */
+        .token-display {
+            background: #0f172a;
+            color: #7dd3fc;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin: 12px 0;
+            word-break: break-all;
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .token-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            margin: 18px 0 6px;
+        }
+
+        .copy-btn {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border: 1.5px solid #c7d2fe;
+            padding: 7px 16px;
+            font-size: 13px;
+        }
+
+        .copy-btn:hover {
+            background: #c7d2fe;
+            transform: translateY(-1px);
+        }
+
+        /* ── User Info Card ───────────────────────────────────────── */
+        .user-info-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: var(--success-bg);
+            border: 1.5px solid #6ee7b7;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .user-avatar-placeholder {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            display: flex;
+            align-items: center;
             justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
         }
-        
-        .auth-btn i {
-            font-size: 16px;
+
+        .user-details { flex: 1; min-width: 0; }
+
+        .user-name {
+            font-weight: 600;
+            color: #065f46;
+            font-size: 14px;
         }
-        
-        .email-btn {
-            background-color: #4285f4;
+
+        .user-meta {
+            font-size: 12px;
+            color: #047857;
+            margin-top: 3px;
+        }
+
+        .user-uid {
+            font-size: 11px;
+            color: #059669;
+            font-family: monospace;
+            margin-top: 2px;
+            word-break: break-all;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--success);
             color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 999px;
+            margin-left: 6px;
         }
-        .email-btn:hover {
-            background-color: #357ae8;
-        }
-        
-        .google-btn {
-            background-color: #db4437;
-            color: white;
-        }
-        .google-btn:hover {
-            background-color: #c23321;
-        }
-        
-        .github-btn {
-            background-color: #333;
-            color: white;
-        }
-        .github-btn:hover {
-            background-color: #24292e;
-        }
-        
-        .clear-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-        .clear-btn:hover {
-            background-color: #c82333;
-        }
-        
+
+        /* ── Help Text ────────────────────────────────────────────── */
         .help-text {
-            background-color: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
+            background: var(--info-bg);
+            border-left: 3px solid var(--info);
+            padding: 12px 16px;
+            margin: 14px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 13.5px;
+            color: #1e40af;
         }
-        
-        .help-text h4 {
-            margin-top: 0;
-            color: #1976D2;
+
+        /* ── Info Icon ────────────────────────────────────────────── */
+        .info-icon {
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 15px;
+            padding: 3px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            margin-left: 6px;
+            vertical-align: middle;
         }
-        
-        .help-text ul {
-            margin: 5px 0;
-            padding-left: 20px;
+
+        .info-icon:hover {
+            color: var(--primary-dark);
+            background: var(--primary-light);
         }
-        
-        .help-text a {
-            color: #1976D2;
-            text-decoration: none;
-        }
-        
-        .help-text a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Floating Action Button Styles */
+
+        /* ── Floating Action Button ───────────────────────────────── */
         .floating-menu {
             position: fixed;
             bottom: 30px;
             right: 30px;
             z-index: 1000;
         }
-        
+
         .fab-main {
-            width: 60px;
-            height: 60px;
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(99,102,241,0.45);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 22px;
             transition: all 0.3s ease;
-            position: relative;
         }
-        
-        .fab-main:hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
-        }
-        
+
+        .fab-main:hover { transform: scale(1.08); box-shadow: 0 10px 28px rgba(99,102,241,0.55); }
+        .fab-main.active { transform: rotate(45deg); }
+        .fab-main.active:hover { transform: rotate(45deg) scale(1.08); }
+
         .fab-menu {
             position: absolute;
-            bottom: 80px;
+            bottom: 70px;
             right: 0;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+            transform: translateY(16px);
+            transition: all 0.25s ease;
         }
-        
-        .fab-menu.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
+
+        .fab-menu.active { opacity: 1; visibility: visible; transform: translateY(0); }
+
         .fab-item {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             text-decoration: none;
-            color: #333;
+            color: var(--text);
             background: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
+            padding: 10px 18px;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
             white-space: nowrap;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 13px;
+            border: 1px solid var(--border);
         }
-        
-        .fab-item:hover {
-            transform: translateX(-10px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-            color: #333;
-            text-decoration: none;
-        }
-        
-        .fab-item i {
-            width: 20px;
-            text-align: center;
-            font-size: 18px;
-        }
-        
-        .fab-item.github i {
-            color: #333;
-        }
-        
-        .fab-item.linkedin i {
-            color: #0077b5;
-        }
-        
-        /* Rotate main button when menu is open */
-        .fab-main.active {
-            transform: rotate(45deg);
-        }
-        
-        .fab-main.active:hover {
-            transform: rotate(45deg) scale(1.1);
-        }
-        
-        /* Mobile responsiveness */
+
+        .fab-item:hover { transform: translateX(-8px); box-shadow: var(--shadow-lg); color: var(--text); text-decoration: none; }
+        .fab-item i { width: 18px; text-align: center; font-size: 16px; }
+        .fab-item.github i { color: #24292e; }
+        .fab-item.linkedin i { color: #0077b5; }
+
         @media (max-width: 768px) {
-            .floating-menu {
-                bottom: 20px;
-                right: 20px;
-            }
-            
-            .fab-main {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
-            
-            .fab-menu {
-                bottom: 70px;
-            }
-            
-            .fab-item {
-                padding: 10px 15px;
-                font-size: 14px;
-            }
+            .floating-menu { bottom: 18px; right: 18px; }
+            .fab-main { width: 46px; height: 46px; font-size: 18px; }
+            .fab-menu { bottom: 60px; }
         }
-        
-        /* Footer Styles */
+
+        /* ── Footer ───────────────────────────────────────────────── */
         .site-footer {
-            background-color: #f8f9fa;
-            border-top: 1px solid #e9ecef;
-            padding: 20px 0;
-            margin-top: 40px;
+            background: #1e1b4b;
+            padding: 36px 24px;
+            margin-top: 0;
             text-align: center;
         }
-        
+
         .footer-content {
-            max-width: 800px;
+            max-width: 780px;
             margin: 0 auto;
-            padding: 0 20px;
         }
-        
-        .footer-description {
-            margin-bottom: 20px;
-        }
-        
+
         .footer-description p {
-            color: #495057;
-            font-size: 14px;
-            line-height: 1.5;
-            margin: 0;
-            text-align: center;
+            color: #a5b4fc;
+            font-size: 13.5px;
+            line-height: 1.7;
+            margin-bottom: 6px;
         }
-        
+
+        .footer-privacy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #818cf8;
+            background: rgba(99,102,241,0.15);
+            border: 1px solid rgba(99,102,241,0.3);
+            padding: 5px 14px;
+            border-radius: 999px;
+            margin: 14px 0 20px;
+        }
+
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 30px;
-            margin-bottom: 0;
+            gap: 12px;
             flex-wrap: wrap;
         }
-        
+
         .footer-link {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: #495057;
+            color: #c7d2fe;
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background-color: white;
-            border: 1px solid #dee2e6;
-            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            transition: all 0.2s;
         }
-        
-        .footer-link:hover {
-            color: #495057;
-            text-decoration: none;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .footer-link i {
-            font-size: 16px;
-        }
-        
 
-        
+        .footer-link:hover { background: rgba(255,255,255,0.15); color: white; text-decoration: none; transform: translateY(-1px); }
+
         @media (max-width: 480px) {
-            .footer-links {
-                gap: 15px;
-            }
-            
-            .footer-link {
-                padding: 6px 12px;
-                font-size: 13px;
-            }
+            .footer-links { gap: 8px; }
+            .footer-link { padding: 7px 14px; font-size: 12px; }
         }
-        
-        /* Info Popup Modal Styles */
-        .info-icon {
-            color: #007bff;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 4px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-            margin-left: 8px;
-        }
-        
-        .info-icon:hover {
-            color: #0056b3;
-            background-color: #e7f3ff;
-            transform: scale(1.1);
-        }
-        
-        /* Modal Overlay */
+
+        /* ── Modal ────────────────────────────────────────────────── */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(15,23,42,0.6);
             z-index: 2000;
             display: none;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(4px);
+            padding: 20px;
         }
-        
-        .modal-overlay.active {
-            display: flex;
-        }
-        
-        /* Modal Content */
+
+        .modal-overlay.active { display: flex; }
+
         .modal-content {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+            max-width: 580px;
+            width: 100%;
+            max-height: 85vh;
             overflow-y: auto;
-            position: relative;
-            animation: modalSlideIn 0.3s ease-out;
+            animation: modalIn 0.25s ease-out;
         }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.92) translateY(-18px); }
+            to   { opacity: 1; transform: scale(1)    translateY(0); }
         }
-        
+
         .modal-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #312e81 0%, #4c1d95 100%);
             color: white;
-            padding: 20px 25px;
-            border-radius: 12px 12px 0 0;
+            padding: 20px 24px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
             position: relative;
         }
-        
-        .modal-header h3 {
-            margin: 0;
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
+
+        .modal-header h3 { margin: 0; font-size: 17px; font-weight: 700; }
+
         .modal-close {
             position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
+            top: 14px; right: 18px;
+            background: rgba(255,255,255,0.15);
             border: none;
             color: white;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
+            padding: 4px 9px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            line-height: 1;
         }
-        
-        .modal-close:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            transform: rotate(90deg);
-        }
-        
-        .modal-body {
-            padding: 25px;
-        }
-        
-        .modal-body h4 {
-            color: #333;
-            margin: 0 0 15px 0;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .modal-body h5 {
-            color: #2e7d32;
-            margin: 20px 0 10px 0;
-            font-size: 15px;
-            border-bottom: 2px solid #e8f5e8;
-            padding-bottom: 5px;
-        }
-        
+
+        .modal-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+
+        .modal-body { padding: 24px; }
+        .modal-body h4 { color: var(--text); margin: 0 0 12px; font-size: 15px; font-weight: 600; }
+        .modal-body h5 { color: var(--success); margin: 18px 0 8px; font-size: 14px; border-bottom: 2px solid var(--success-bg); padding-bottom: 4px; }
+        .modal-body ul { padding-left: 20px; line-height: 1.7; }
+        .modal-body li { margin-bottom: 7px; font-size: 14px; }
+        .modal-body strong { color: var(--text); }
+        .modal-body a { color: var(--info); text-decoration: none; }
+        .modal-body a:hover { text-decoration: underline; }
+
         .direct-links {
-            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--success-bg), #f0fdf4);
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 18px;
+            border: 1px solid #6ee7b7;
         }
-        
-        .direct-links ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-        
-        .direct-links li {
-            margin-bottom: 8px;
-        }
-        
-        .direct-links a {
-            color: #2e7d32;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .direct-links a:hover {
-            text-decoration: underline;
-            color: #1b5e20;
-        }
-        
-        .modal-body ul {
-            padding-left: 20px;
-            line-height: 1.6;
-        }
-        
-        .modal-body li {
-            margin-bottom: 8px;
-        }
-        
-        .modal-body strong {
-            color: #333;
-        }
-        
-        .modal-body a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        
-        .modal-body a:hover {
-            text-decoration: underline;
-        }
-        
+
+        .direct-links ul { margin: 0; }
+        .direct-links a { color: #059669; font-weight: 600; }
+        .direct-links a:hover { color: #047857; }
+
         .tip-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
+            background: var(--warning-bg);
+            border-left: 3px solid var(--warning);
+            padding: 12px 16px;
+            margin: 14px 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 13.5px;
+            color: #92400e;
         }
-        
-        .tip-box strong {
-            color: #856404;
-        }
-        
+
+        .tip-box strong { color: #78350f; }
+
         @media (max-width: 768px) {
-            .modal-content {
-                width: 95%;
-                max-height: 90vh;
-            }
-            
-            .modal-header {
-                padding: 15px 20px;
-            }
-            
-            .modal-body {
-                padding: 20px;
-            }
+            .modal-content { max-height: 90vh; }
+            .modal-body { padding: 18px; }
+            .hero { padding: 40px 18px 32px; }
+            .main-wrapper { padding: 24px 14px 48px; }
+            .step-body { padding: 18px; }
+            .hero-stats { gap: 20px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🔥 Firebase JWT Token Generator</h1>
-        
-        <div style="text-align: center; margin-bottom: 30px; padding: 15px; background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border-radius: 8px; border-left: 4px solid #2196F3;">
-            <p style="margin: 0; font-size: 16px; color: #333; line-height: 1.5;">
-                <strong>Generate Firebase JWT tokens for testing and development</strong> - Authenticate with Email/Password, Google, or GitHub and get JWT tokens to test your Firebase-secured APIs and applications.
-            </p>
+
+    <!-- ── Hero ───────────────────────────────────────────────────── -->
+    <header class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">
+                <i class="fas fa-fire"></i>
+                Developer Tool
+            </div>
+            <h1>Firebase <span>JWT Token</span> Generator</h1>
+            <p>Authenticate with Email, Google, or GitHub and instantly get JWT tokens to test your Firebase-secured APIs and applications.</p>
+            <div class="hero-stats">
+                <div class="hero-stat"><i class="fas fa-shield-alt" aria-hidden="true"></i> Runs entirely in your browser</div>
+                <div class="hero-stat"><i class="fas fa-lock" aria-hidden="true"></i> No data stored on servers</div>
+                <div class="hero-stat"><i class="fab fa-github" aria-hidden="true"></i> Open source</div>
+            </div>
         </div>
-        
-        <div class="section">
-            <h3>Step 1: Firebase Configuration
-                <i class="fas fa-info-circle info-icon" onclick="openModal('firebaseConfigModal')"></i>
-            </h3>
-            <label for="firebaseConfig">Paste your Firebase Config JSON:</label>
-            <textarea id="firebaseConfig" rows="8" placeholder='{
+    </header>
+
+    <!-- ── Main content ───────────────────────────────────────────── -->
+    <main class="main-wrapper">
+
+        <!-- Step 1 -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-num">1</div>
+                <div class="step-title">Firebase Configuration
+                    <i class="fas fa-info-circle info-icon" onclick="openModal('firebaseConfigModal')"></i>
+                </div>
+            </div>
+            <div class="step-body">
+                <label for="firebaseConfig">Paste your Firebase Config JSON</label>
+                <textarea id="firebaseConfig" rows="8" placeholder='{
   "apiKey": "your-api-key",
   "authDomain": "your-project.firebaseapp.com",
   "projectId": "your-project-id",
@@ -592,99 +756,108 @@
   "appId": "1:123456789:web:abcdef123456"
 }
 
-💡 Tip: Successful configurations are automatically saved for your session!'></textarea>
-            <button onclick="initializeFirebase()">
-                <i class="fas fa-rocket"></i> Initialize Firebase
-            </button>
-            <button onclick="clearSavedConfig()" style="background-color: #6c757d; margin-left: 10px;">
-                <i class="fas fa-trash"></i> Clear Saved Config
-            </button>
-            <div id="initStatus"></div>
-        </div>
-
-        <div class="section">
-            <h3>Step 2: Authentication
-                <i class="fas fa-info-circle info-icon" onclick="openModal('authSetupModal')"></i>
-            </h3>
-            <div id="authSection" class="hidden">
-                
-                <label for="email">Email:</label>
-                <input type="email" id="email" placeholder="user@example.com">
-                
-                <label for="password">Password:</label>
-                <input type="password" id="password" placeholder="password">
-                
-                <div class="auth-buttons">
-                    <div class="auth-btn-container">
-                        <button class="auth-btn email-btn" onclick="signInUser()">
-                            <i class="fas fa-envelope"></i>
-                            Sign In with Email
-                        </button>
-                        <i class="fas fa-info-circle info-icon" onclick="openModal('emailAuthModal')"></i>
-                    </div>
-                    
-                    <div class="auth-btn-container">
-                        <button class="auth-btn google-btn" onclick="signInWithGoogle()">
-                            <i class="fab fa-google"></i>
-                            Sign In with Google
-                        </button>
-                        <i class="fas fa-info-circle info-icon" onclick="openModal('googleAuthModal')"></i>
-                    </div>
-                    
-                    <div class="auth-btn-container">
-                        <button class="auth-btn github-btn" onclick="signInWithGithub()">
-                            <i class="fab fa-github"></i>
-                            Sign In with GitHub
-                        </button>
-                        <i class="fas fa-info-circle info-icon" onclick="openModal('githubAuthModal')"></i>
-                    </div>
-                    
-                    <button class="auth-btn clear-btn" onclick="clearAuth()">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Clear Auth
+💡 Successful configurations are automatically saved for your session!'></textarea>
+                <div class="btn-actions">
+                    <button class="btn-primary" onclick="initializeFirebase()">
+                        <i class="fas fa-rocket"></i> Initialize Firebase
+                    </button>
+                    <button class="btn-secondary" onclick="clearSavedConfig()">
+                        <i class="fas fa-trash"></i> Clear Saved Config
                     </button>
                 </div>
-                
-                <div id="authStatus"></div>
+                <div id="initStatus"></div>
             </div>
         </div>
 
-        <div class="section">
-            <h3>Step 3: JWT Token</h3>
-            <div id="tokenSection" class="hidden">
-                <p>User authenticated successfully!</p>
-                
-                <div id="manualTokenButtons">
-                    <button onclick="getIdToken()">
-                        <i class="fas fa-key"></i> Get JWT Token
-                    </button>
-                </div>
-                
-                <div id="refreshTokenButtons" class="hidden">
-                    <button onclick="refreshToken()">
-                        <i class="fas fa-sync-alt"></i> Refresh Token
-                    </button>
-                    <p><em>JWT token retrieved successfully! Use refresh to get a new token.</em></p>
-                </div>
-                
-                <div id="userInfo"></div>
-                
-                <div id="tokenDisplay" class="hidden">
-                    <h4>Your JWT Token:</h4>
-                    <div class="token-display" id="jwtToken"></div>
-                    <button class="copy-btn" onclick="copyToken()">
-                        <i class="fas fa-copy"></i> Copy Token
-                    </button>
-                    
-                    <h4>Token Claims (Decoded):</h4>
-                    <div class="token-display" id="tokenClaims"></div>
+        <!-- Step 2 -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-num">2</div>
+                <div class="step-title">Authentication
+                    <i class="fas fa-info-circle info-icon" onclick="openModal('authSetupModal')"></i>
                 </div>
             </div>
+            <div class="step-body">
+                <div id="authSection" class="hidden">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="user@example.com">
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+
+                    <div class="auth-buttons">
+                        <div class="auth-btn-container">
+                            <button class="auth-btn email-btn" onclick="signInUser()">
+                                <i class="fas fa-envelope"></i> Sign In with Email
+                            </button>
+                            <i class="fas fa-info-circle info-icon" onclick="openModal('emailAuthModal')"></i>
+                        </div>
+                        <div class="auth-btn-container">
+                            <button class="auth-btn google-btn" onclick="signInWithGoogle()">
+                                <i class="fab fa-google"></i> Sign In with Google
+                            </button>
+                            <i class="fas fa-info-circle info-icon" onclick="openModal('googleAuthModal')"></i>
+                        </div>
+                        <div class="auth-btn-container">
+                            <button class="auth-btn github-btn" onclick="signInWithGithub()">
+                                <i class="fab fa-github"></i> Sign In with GitHub
+                            </button>
+                            <i class="fas fa-info-circle info-icon" onclick="openModal('githubAuthModal')"></i>
+                        </div>
+                        <button class="auth-btn clear-btn" onclick="clearAuth()">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </div>
+
+                    <div id="authStatus"></div>
+                </div>
+                <p id="authPlaceholder" style="color:var(--text-muted);font-size:14px;">Complete Step 1 first to enable authentication.</p>
+            </div>
         </div>
-    </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-num">3</div>
+                <div class="step-title">JWT Token</div>
+            </div>
+            <div class="step-body">
+                <div id="tokenSection" class="hidden">
+                    <div id="userInfo"></div>
+
+                    <div id="manualTokenButtons">
+                        <button class="btn-primary" onclick="getIdToken()">
+                            <i class="fas fa-key"></i> Get JWT Token
+                        </button>
+                    </div>
+
+                    <div id="refreshTokenButtons" class="hidden">
+                        <button class="btn-primary" onclick="refreshToken()">
+                            <i class="fas fa-sync-alt"></i> Refresh Token
+                        </button>
+                        <p style="margin-top:10px;font-size:13px;color:var(--text-muted);"><i class="fas fa-check-circle" style="color:var(--success);"></i> Token retrieved — use Refresh to get a new one.</p>
+                    </div>
+
+                    <div id="tokenDisplay" class="hidden">
+                        <div class="token-label">Your JWT Token</div>
+                        <div class="token-display" id="jwtToken"></div>
+                        <button class="copy-btn" onclick="copyToken()">
+                            <i class="fas fa-copy"></i> Copy Token
+                        </button>
+
+                        <div class="token-label" style="margin-top:20px;">Token Claims (Decoded)</div>
+                        <div class="token-display" id="tokenClaims"></div>
+                    </div>
+                </div>
+                <p id="tokenPlaceholder" style="color:var(--text-muted);font-size:14px;">Sign in successfully to retrieve your JWT token.</p>
+            </div>
+        </div>
+
+    </main>
 
     <!-- Firebase SDK -->
     <script type="module">
+
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js';
 
@@ -730,6 +903,8 @@
             clearTokenDisplay();
             document.getElementById('authStatus').innerHTML = '';
             document.getElementById('authSection').classList.add('hidden');
+            const authPlaceholder = document.getElementById('authPlaceholder');
+            if (authPlaceholder) authPlaceholder.classList.remove('hidden');
         };
 
         window.initializeFirebase = function() {
@@ -786,6 +961,8 @@
                 updateDomainAuthModal(projectId, currentDomain);
                 updateProviderModals(projectId);
                 document.getElementById('authSection').classList.remove('hidden');
+                const authPlaceholder = document.getElementById('authPlaceholder');
+                if (authPlaceholder) authPlaceholder.classList.add('hidden');
                 
             } catch (error) {
                 document.getElementById('initStatus').innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
@@ -908,21 +1085,31 @@
 
         function showTokenSection(user) {
             document.getElementById('tokenSection').classList.remove('hidden');
+            const placeholder = document.getElementById('tokenPlaceholder');
+            if (placeholder) placeholder.classList.add('hidden');
+            const avatarEl = user.photoURL
+                ? `<img src="${user.photoURL}" class="user-avatar" alt="avatar">`
+                : `<div class="user-avatar-placeholder"><i class="fas fa-user"></i></div>`;
+            const verifiedBadge = user.emailVerified
+                ? `<span class="verified-badge"><i class="fas fa-check"></i> Verified</span>`
+                : '';
+            const provider = user.providerData.length > 0 ? user.providerData[0].providerId : 'password';
             document.getElementById('userInfo').innerHTML = `
-                <div class="success">
-                    <strong>User Info:</strong><br>
-                    UID: ${user.uid}<br>
-                    Email: ${user.email || 'Anonymous'}<br>
-                    Email Verified: ${user.emailVerified}<br>
-                    Display Name: ${user.displayName || 'Not set'}<br>
-                    Photo URL: ${user.photoURL ? `<img src="${user.photoURL}" width="50" height="50" style="border-radius: 25px;">` : 'Not set'}<br>
-                    Provider: ${user.providerData.length > 0 ? user.providerData[0].providerId : 'password'}
+                <div class="user-info-card">
+                    ${avatarEl}
+                    <div class="user-details">
+                        <div class="user-name">${user.displayName || user.email || 'Authenticated User'}${verifiedBadge}</div>
+                        <div class="user-meta">${user.email || 'Anonymous'} &nbsp;·&nbsp; ${provider}</div>
+                        <div class="user-uid">UID: ${user.uid}</div>
+                    </div>
                 </div>
             `;
         }
 
         function hideTokenSection() {
             document.getElementById('tokenSection').classList.add('hidden');
+            const placeholder = document.getElementById('tokenPlaceholder');
+            if (placeholder) placeholder.classList.remove('hidden');
             // Reset button visibility when hiding token section
             showManualTokenButton();
         }
@@ -1114,27 +1301,21 @@
         }
     </script>
 
-                </div>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-description">
-                <p><strong>Firebase JWT Token Generator</strong> - A development tool for generating and managing Firebase authentication tokens. Perfect for testing Firebase-authenticated APIs, debugging authentication flows, and development environments.</p>
-                <p style="font-size: 13px; color: #666; margin-top: 10px;">
-                    🔒 <strong>Privacy:</strong> This tool runs entirely in your browser - no data is saved or transmitted to any servers. The code is open source for transparency.
-                </p>
+                <p><strong>Firebase JWT Token Generator</strong> — A development tool for generating and managing Firebase authentication tokens. Perfect for testing Firebase-authenticated APIs, debugging authentication flows, and development environments.</p>
+            </div>
+            <div class="footer-privacy">
+                <i class="fas fa-lock"></i> Runs entirely in your browser — no data is saved or transmitted to any servers. Open source for transparency.
             </div>
             <div class="footer-links">
                 <a href="https://github.com/muthuishere/firebase-jwt-generator" target="_blank" class="footer-link">
-                    <i class="fab fa-github"></i>
-                    Source Code
+                    <i class="fab fa-github"></i> Source Code
                 </a>
                 <a href="https://www.linkedin.com/in/muthuishere/" target="_blank" class="footer-link">
-                    <i class="fab fa-linkedin"></i>
-                    Connect
+                    <i class="fab fa-linkedin"></i> Connect
                 </a>
             </div>
         </div>
